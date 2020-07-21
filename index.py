@@ -1,6 +1,7 @@
 import tkinter as tk
 
 Window = tk.Tk()
+Window.title('Canbang')
 
 Canvas = tk.Canvas(
 	Window,
