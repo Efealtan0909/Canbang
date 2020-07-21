@@ -84,8 +84,10 @@ if __name__ == "__main__":
 
 	Canvas.pack()
 
-	def loop(delta):
+	async def loop(delta):
 		fps = int(1/delta)
+		fpslog_file = open('fpslog.txt', 'a')
+        await fpslog_file.append(fps)
 		crossair.draw()
 		fpscounter.fps = fps
 		fpscounter.update()
