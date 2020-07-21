@@ -2,6 +2,7 @@ from time import time, sleep
 import tkinter as tk
 
 GAMEFPS = 120
+LOGFPS = 1
 
 class Loop():
 	def __init__(self, root, fps, loop_func):
@@ -86,8 +87,9 @@ if __name__ == "__main__":
 
 	def loop(delta):
 		fps = int(1/delta)
-		fpslog_file = open('fpslog.txt', 'a')
-		fpslog_file.write('{0}\n'.format(fps))
+		if(LOGFPS == 1):
+			fpslog_file = open('fpslog.txt', 'a')
+			fpslog_file.write('{0}\n'.format(fps))
 		crossair.draw()
 		fpscounter.fps = fps
 		fpscounter.update()
