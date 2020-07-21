@@ -1,7 +1,7 @@
 from time import time, sleep
 import tkinter as tk
 
-GAMEFPS = 120
+GAMEFPS = 60
 
 class Loop():
 	def __init__(self, root, fps, loop_func):
@@ -44,15 +44,26 @@ class CrossAir:
 		self.width = 10
 		self.height = 10
 		self.shape = self.c.create_rectangle(self.x, self.y, self.width, self.height, outline="black", fill="black")
-		
+	
+	def draw(self):
+		self.c.coords(self.shape, self.x, self.y, self.x + self.width, self.y + self.height)
+
 	def update(self, event):
 		self.x = event.x
 		self.y = event.y
-		self.c.coords(self.shape, self.x, self.y, self.x + self.width, self.y + self.height)
 
 class FPS:
 	def __init__(self, c):
-		self
+		self.c = c
+		self.x = 0
+		self.y = 0
+		self.fps = GAMEFPS
+		self.text = tk.StringVar()
+		self.text.set(self.fps)
+		self.label = tk.Label(self.c, textvariable=self.text, fg="white", bg="black")
+		self.label.place(x=self.x, y=self.y)
+	def update(self):
+		self.text.set(self.fps)
 
 if __name__ == "__main__":
 	Window = tk.Tk()
@@ -67,12 +78,17 @@ if __name__ == "__main__":
 	)
 
 	crossair = CrossAir(Canvas)
+	fpscounter = FPS(Canvas)
 	Window.bind('<Motion>', crossair.update)
 
 	Canvas.pack()
 
 	def loop(delta):
-		print(int(1/delta), end="\r")
+		fps = int(1/delta)
+		crossair.draw()
+		fpscounter.fps = fps
+		fpscounter.update()
+		print(fps, end="\r")
 
 	gameloop = Loop(Window, GAMEFPS, loop)
 	gameloop.start()
