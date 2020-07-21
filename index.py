@@ -1,7 +1,7 @@
 from time import time, sleep
 import tkinter as tk
 
-GAMEFPS = 60
+GAMEFPS = 120
 
 class Loop():
 	def __init__(self, root, fps, loop_func):
@@ -84,10 +84,10 @@ if __name__ == "__main__":
 
 	Canvas.pack()
 
-	async def loop(delta):
+	def loop(delta):
 		fps = int(1/delta)
 		fpslog_file = open('fpslog.txt', 'a')
-		await fpslog_file.append(fps)
+		fpslog_file.write('{0}\n'.format(fps))
 		crossair.draw()
 		fpscounter.fps = fps
 		fpscounter.update()
