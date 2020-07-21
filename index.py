@@ -29,6 +29,7 @@ class Loop():
 			exec_time = time()
 			self.loop_func(delta)
 			delta = time() - time_delay
+			if (delta == 0) delta = 0.1
 			time_delay = time()
 			self.schedule(exec_time, loop)
 		self.schedule(0, loop)
