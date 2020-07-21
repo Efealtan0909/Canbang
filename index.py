@@ -21,7 +21,7 @@ class Loop():
 		delta = self.frame_delay
 		if (self.unlimited):
 			delta = 0.1
-		time_delay = 0
+		time_delay = time()
 		def loop():
 			nonlocal delta
 			nonlocal time_delay
@@ -29,7 +29,7 @@ class Loop():
 			exec_time = time()
 			self.loop_func(delta)
 			delta = time() - time_delay
-			if (delta == 0) delta = 0.1
+			if (delta == 0): delta = 0.1
 			time_delay = time()
 			self.schedule(exec_time, loop)
 		self.schedule(0, loop)
