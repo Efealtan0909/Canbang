@@ -1,6 +1,6 @@
 # Canbang
 
-a game that you shoot cans
+#### a game that you shoot cans
 
 ### Discord    : https://discord.gg/W79dpcK
 ### Developers : 
