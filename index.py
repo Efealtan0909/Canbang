@@ -2,7 +2,7 @@ from time import time, sleep
 import tkinter as tk
 
 GAMEFPS = 120
-LOGFPS = 1
+LOGFPS = 0
 
 class Loop():
 	def __init__(self, root, fps, loop_func):
