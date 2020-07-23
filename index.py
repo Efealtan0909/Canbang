@@ -1,5 +1,6 @@
 from time import time, sleep
 import tkinter as tk
+import math
 
 GAMEFPS = 60
 
@@ -36,6 +37,22 @@ class Loop():
 	def stop(self):
 		if (not self.running): pass
 		self.running = False
+
+class Camara:
+	theta = 1
+	z = -3
+	focallength = 10
+	def _perspective(self, p):
+		x,y,z = p
+		x_rot = x * math.cos(self.theta) - z * math.sin(self.theta)
+		z_rot = x * math.sin(self.theta) + z * math.cos(self.theta)
+		dz = z_rot - self.z
+		out_z = z + self.focallength
+		m_xz = x_rot / dz
+		m_yz = y / dz
+		out_x = m_xz * out_z
+		out_y = m_yz * out_z
+		return [out_x, out_y]
 
 class CrossAir:
 	def __init__(self, c):
@@ -74,24 +91,29 @@ if __name__ == "__main__":
 		Window,
 		width=500,
 		height=500,
-		cursor="none",
 		bg="lightblue"
 	)
 
+	cam = Camara()
+
 	crossair = CrossAir(Canvas)
 	fpscounter = FPS(Canvas)
-	Window.bind('<Motion>', crossair.update)
+	camobject = [2, 2, 2]
+	def callback(e):
+		cam.theta = e.x / 10
+		# cam.z = e.y
+	Window.bind('<Motion>', callback)
 
 	Canvas.pack()
 
-	async def loop(delta):
+	def loop(delta):
 		fps = int(1/delta)
-		fpslog_file = open('fpslog.txt', 'a')
-		await fpslog_file.append(fps)
+		cords = cam._perspective(camobject)
+		print(cords)
+		crossair.x = cords[0]
+		crossair.y = cords[1]
 		crossair.draw()
 		fpscounter.fps = fps
-		fpscounter.update()
-		print(fps, end="\r")
 
 	gameloop = Loop(Window, GAMEFPS, loop)
 	gameloop.start()
