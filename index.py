@@ -39,20 +39,14 @@ class Loop():
 		self.running = False
 
 class Camara:
-	theta = 1
-	z = -3
-	focallength = 10
-	def _perspective(self, p):
-		x,y,z = p
-		x_rot = x * math.cos(self.theta) - z * math.sin(self.theta)
-		z_rot = x * math.sin(self.theta) + z * math.cos(self.theta)
-		dz = z_rot - self.z
-		out_z = z + self.focallength
-		m_xz = x_rot / dz
-		m_yz = y / dz
-		out_x = m_xz * out_z
-		out_y = m_yz * out_z
-		return [out_x, out_y]
+	x_rot = 0
+	fview = 180
+	def __init__(self, x_rot = 0, fview = 90):
+		self.x_rot = x_rot
+		self.fview = fview
+	def perspective(self, rot):
+		rot_diff = self.x_rot - rot
+		return (rot_diff / self.fview) * 500
 
 class CrossAir:
 	def __init__(self, c):
@@ -98,20 +92,17 @@ if __name__ == "__main__":
 
 	crossair = CrossAir(Canvas)
 	fpscounter = FPS(Canvas)
-	camobject = [2, 2, 2]
 	def callback(e):
-		cam.theta = e.x / 10
-		# cam.z = e.y
+		cam.x_rot = (360/500) * e.x
+		crossair.y = e.y
 	Window.bind('<Motion>', callback)
 
 	Canvas.pack()
 
 	def loop(delta):
 		fps = int(1/delta)
-		cords = cam._perspective(camobject)
-		print(cords)
-		crossair.x = cords[0]
-		crossair.y = cords[1]
+		cords = cam.perspective(0)
+		crossair.x = cords
 		crossair.draw()
 		fpscounter.fps = fps
 
